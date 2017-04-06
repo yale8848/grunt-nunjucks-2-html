@@ -1,4 +1,4 @@
-# Grunt task for rendering nunjucks` templates to HTML
+# Grunt task for rendering nunjucks` templates to HTML with mutil task base [grunt-nunjucks-2-html](https://www.npmjs.com/package/grunt-nunjucks-2-html)
 
 [![NPM version](https://badge.fury.io/js/grunt-nunjucks-2-html.png)](http://badge.fury.io/js/grunt-nunjucks-2-html)
 
@@ -9,7 +9,7 @@ If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out th
 Once plugin has been installed include it in your `Gruntfile.js`
 
 ```javascript
-grunt.loadNpmTasks('grunt-nunjucks-2-html');
+grunt.loadNpmTasks('grunt-nunjucks-2-html-mutil');
 ```
 
 ## Usage examples
@@ -17,7 +17,7 @@ grunt.loadNpmTasks('grunt-nunjucks-2-html');
 Task targets and options may be specified according to the grunt [Configuring tasks](http://gruntjs.com/configuring-tasks) guide.
 
 ```javascript
-nunjucks: {
+nunjucksMutil: {
   options: {
     data: grunt.file.readJSON('data.json'),
     paths: 'templates'
@@ -26,14 +26,33 @@ nunjucks: {
     files: {
       'index.html' : ['index.html']
     }
+  },
+  more:{
+      options: {
+    data: grunt.file.readJSON('data-more.json'),
+    paths: 'templates'
+  },
+  render: {
+    files: {
+      'index.html' : ['index.html']
+    }
+  }
   }
 }
+
+```
+grunt.registerTask('default', ['nunjucksMutil:more'])
+
+```
+
+
+
 ```
 
 `templates/index.html` (relative to the gruntfile) is now compiled with `data.json`!
 
 ```javascipt
-nunjucks: {
+nunjucksMutil: {
   options: {
     data: grunt.file.readJSON('data.json')
   },
@@ -72,7 +91,7 @@ You should specify a function to construct each data object for every of your te
 For instance, you could include name of the file inside an every data object
 
 ```js
-nunjucks: {
+nunjucksMutil: {
   options: {
     preprocessData: function(data) {
       var page = require('path').basename(this.src[0], '.html');
@@ -109,7 +128,7 @@ You could use nunjucks' environment API to set some global options. Use `configu
 As the second argument for the function you have nunjucks` instance, so you can do some extra work before rendering. For instance, you can pre-render some string in custom filter or extension.
 
 ```js
-nunjucks: {
+nunjucksMutil: {
   options: {
     configureEnvironment: function(env, nunjucks) {
       // for instance, let's set a global variable across all templates
@@ -141,7 +160,7 @@ You can use [nunjucks' configure API](http://mozilla.github.io/nunjucks/api#conf
 If you want different tokens than {{ and the rest for variables, blocks, and comments, you can specify different tokens as the tags option:
 
 ```js
-nunjucks: {
+nunjucksMutil: {
   options: {
     tags: {
       blockStart: '<%',
